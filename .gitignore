@@ -1,8 +1,9 @@
-*.log
+*.aux
+*.bbl
+*.blg
 *.fbd_latexmk
-*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.log
 *.pdf
-egpaper_final.blg
-egpaper_final.fls
-egpaper_final.synctex.gz
-egpaper_final.fdb_latexmk
+*.synctex.gz
