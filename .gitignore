@@ -1,0 +1,4 @@
+*.log
+*.fbd_latexmk
+*.synctex.gz
+*.pdf
