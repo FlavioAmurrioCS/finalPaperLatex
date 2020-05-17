@@ -2,3 +2,7 @@
 *.fbd_latexmk
 *.synctex.gz
 *.pdf
+egpaper_final.blg
+egpaper_final.fls
+egpaper_final.synctex.gz
+egpaper_final.fdb_latexmk
