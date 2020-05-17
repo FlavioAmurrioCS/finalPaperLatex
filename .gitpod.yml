@@ -1,0 +1,8 @@
+tasks:
+  - init: echo "Replace me with a build script for the project."
+    command: echo "Replace me with something that should run on every start, or just
+      remove me entirely."
+
+vscode:
+  extensions:
+    - James-Yu.latex-workshop@8.9.0:gTgjuW3GBGhya2rX2EboWw==
