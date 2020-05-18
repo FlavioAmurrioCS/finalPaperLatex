@@ -85,29 +85,46 @@ price, promotions, day of the week, and special events.
   We were given a star schema dataset of csv files that contained 3 files to be
   used for training.
 
-  calendar.csv - information regarding dates of product sales.
+  \noindent {\bf calendar.csv} - information regarding dates of product sales.
+{\small\begin{verbatim}
+schema: date, wm_yr_wk, weekday, wday, month,
+        year, d, event_name_1, event_type_1,
+        event_name_2, event_type_2, snap_CA,
+        snap_TX, snap_WI
 
-  schema - date, wm\_yr\_wk, weekday, wday, month, year, d, event\_name\_1,
-  event\_type\_1, event\_name\_2, event\_type\_2, snap\_CA, snap\_TX, snap\_WI
+row: 2011-01-29, 11101, Saturday, 1, 1, 2011,
+     d_1, , , , , 0 , 0 , 0
+\end{verbatim}}
 
-  row - 2011-01-29, 11101, Saturday, 1, 1, 2011, d\_1, , , , , 0 , 0 , 0
+  % \noindent schema - date, wm\_yr\_wk, weekday, wday, month, year, d, event\_name\_1,
+  % event\_type\_1, event\_name\_2, event\_type\_2, snap\_CA, snap\_TX, snap\_WI
+
+  % \noindent row - 2011-01-29, 11101, Saturday, 1, 1, 2011, d\_1, , , , , 0 , 0 , 0
 
 
-  sales\_train\_validation.csv - actual sales respective to date ‘d’, by hierarchical data
-  schema - id, item\_id, dept\_id, cat\_id, store\_id, state\_id, d\_1, ...d\_1913
+  \noindent {\bf sales\_train\_validation.csv} - actual sales respective to date ‘d’, by hierarchical data.
+  {\small\begin{verbatim}
+schema: id, item_id, dept_id, cat_id,
+        store_id, state_id, d_1,...d_1913
 
-  row - HOBBIES\_1\_001\_CA\_1\_validation, HOBBIES\_1\_001, HOBBIES\_1, HOBBIES, CA\_1, CA, 0, ...1
+row: HOBBIES_1_001_CA_1_validation,
+     HOBBIES_1_001, HOBBIES_1, HOBBIES,
+     CA_1, CA, 0, ...1
+  \end{verbatim}}
 
-  sell\_prices.csv - prices of products per a certain store and date
 
-  schema -  store\_id, item\_id, wm\_yr\_wk, sell\_price
+  \noindent {\bf sell\_prices.csv} - prices of products per a certain store and date
 
-  row - CA\_1, HOBBIES\_1\_001, 11325, 9.58
+  {\small\begin{verbatim}
+schema: store_id, item_id, wm_yr_wk, sell_price
+
+row: CA_1, HOBBIES_1_001, 11325, 9.58
+  \end{verbatim}}
 
 
 
 \subsection{Closer Look At The Data}
-
+  Graphing the data allows us to visualize some of the shopping trends.
 
 \begin{figure*}
   \begin{center}
@@ -117,7 +134,9 @@ price, promotions, day of the week, and special events.
   \caption{Total items sold of each category.}
   \label{fig:totalItemSoldofEachCategory}
 \end{figure*}
-In Figure~\ref{fig:totalItemSoldofEachCategory} shows ...
+  In Figure~\ref{fig:totalItemSoldofEachCategory} we can visualize the number of
+  items per category. We can see a certain drop towards the end of each year
+  which we'll see in later graphs.
 
 \begin{figure*}
   \begin{center}
@@ -127,8 +146,9 @@ In Figure~\ref{fig:totalItemSoldofEachCategory} shows ...
     \caption{Total items sold per day in December 2015.}
   \label{fig:totalSoldItemPerDayDec2015}
 \end{figure*}
-In Figure~\ref{fig:totalSoldItemPerDayDec2015} shows ...
-
+  Figure~\ref{fig:totalSoldItemPerDayDec2015} shows the sales for the month of
+  December in 2015. Here it shows that the day of the drop is December 25 with
+  is Christmas.
 
 \begin{figure*}
   \begin{center}
@@ -138,8 +158,10 @@ In Figure~\ref{fig:totalSoldItemPerDayDec2015} shows ...
     \caption{Total items sold each day of the week}
   \label{fig:totalSoldItemInEachDayOfWeek}
 \end{figure*}
-In Figure~\ref{fig:totalSoldItemInEachDayOfWeek} shows ...
-
+  Figure~\ref{fig:totalSoldItemInEachDayOfWeek} shows the number of items sold
+  per day of the week. Here we can see how people tend to do grocery shopping on
+  weekends and sales is lower towards the middle of the week. This is correlates
+  to many stores doing restock on Tuesdays.
 
 \begin{figure*}
   \begin{center}
@@ -149,11 +171,9 @@ In Figure~\ref{fig:totalSoldItemInEachDayOfWeek} shows ...
     \caption{Total items sold in each state.}
   \label{fig:totalItemSoldInEachState}
 \end{figure*}
-In Figure~\ref{fig:totalItemSoldInEachState} shows ...
-
-
-
-
+  Lastly, Figure~\ref{fig:totalItemSoldInEachState} graphs the items sold in
+  California, Texas and Wisconsin showing, as we should expect, that a bigger
+  population means more sales.
 
 %-------------------------------------------------------------------------
 \section{Approach}
@@ -164,19 +184,30 @@ In Figure~\ref{fig:totalItemSoldInEachState} shows ...
   evaluation on.
 
 \subsection{Dataset}
-In order to train a Neural Network that can learn to correctly predict the
-number of sales per the hierarchical data shown above, i.e. item in a
-department, in a particular store, in a particular state, for a particular range
-of dates, we collapsed the star schema into a singular table containing all this
-particular information, with the dates and corresponding sales both becoming
-respondent columns. The training file ended up looking as such.
+  In order to train a Neural Network that can learn to correctly predict the
+  number of sales per the hierarchical data shown above, i.e. item in a
+  department, in a particular store, in a particular state, for a particular
+  range of dates, we collapsed the star schema into a singular table containing
+  all this particular information, with the dates and corresponding sales both
+  becoming respondent columns. The training file ended up looking as such.
 
-sales.csv - training file for the neural network, containing labels and its
-respective metadata.
+\noindent {\bf sales.csv} - training file for the neural network, containing
+labels and its respective metadata.
 
-\noindent schema - sales, id, item\_id, dept\_id, cat\_id, store\_id, state\_id, d, date, wm\_yr\_wk, weekday, wday, month, year, event\_name\_1, event\_type\_1, event\_name\_2, event\_type\_2, snap\_CA, snap\_TX, snap\_WI, sell\_price
+{\small\begin{verbatim}
+schema: sales, id, item_id, dept_id, cat_id,
+        store_id, state_id, d, date,
+        wm_yr_wk, weekday, wday, month,
+        year, event_name_1, event_type_1,
+        event_name_2, event_type_2, snap_CA,
+        snap_TX, snap_WI, sell_price
 
- \noindent row: 0, HOBBIES\_1\_001\_CA\_1\_validation, HOBBIES\_1\_001, HOBBIES\_1, HOBBIES, CA\_1, CA, d\_1, 2011-01-29, 11101, Saturday, 1, 1, 2011, , , , , 0, 0, 0,
+row: 0, HOBBIES_1_001_CA_1_validation,
+     HOBBIES_1_001, HOBBIES_1, HOBBIES, CA_1,
+     CA, d_1, 2011-01-29, 11101, Saturday, 1,
+     1, 2011, , , , , 0, 0, 0,
+\end{verbatim}}
+
 
 The column sales correspond to the number of products sold at that certain date
 per the hierarchical item. In order to develop such a training set, it is
@@ -192,14 +223,33 @@ merged with its surrounding tables, it became over 60 million rows, a job for a
 server computer with at least 50gb of ram. At the time, we didn’t have access to
 a server computer, thus partitioned data and then finally concatenated them
 together. Once we had access to a server computer with 128gb of ram, we were
-able to load the dataset into memory. Loading the file into a pandas dataframe
+able to load the dataset into memory. Loading the file into a pandas' dataframe
 took over 4 minutes. However, after manually typing the pandas’ columns to
-smaller data types, the load took somewhere around 3-4 minutes. The type was
-defined as below.
+smaller data types, the load took somewhere around 3-4 minutes. The types were
+define as shown on Table \ref{typesTable}
 
- 'snap\_CA': 'int8', 'snap\_TX': 'int8', 'snap\_WI': 'int8', 'sales': 'float32',
- 'wm\_yr\_wk': 'int16', 'wday': 'int8', 'month': 'int8', 'year': 'int8',
- 'sell\_price': 'float32'
+\begin{table}[]
+  \begin{center}
+    \begin{tabular}{|l|l|}
+      \hline
+            Column Name & Type \\
+      \hline\hline
+      snap\_CA & int8 \\
+      snap\_TX & int8 \\
+      snap\_WI & int8 \\
+      sales & float32 \\
+      wm\_yr\_wk & int16 \\
+      wday & int8 \\
+      month & int8 \\
+      year & int8 \\
+      sell\_price & float32 \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \label{typesTable}\
+  \caption{Types Table.}
+\end{table}
+
 
 \subsection{Model/Data}
 The model we used was a tabular model from a popular repository on GitHub,
@@ -252,43 +302,65 @@ The prices ranged from .01 to 107.32, before Standardization.
   variable to the end of the value, thus having a single vector as input to the
   subsequent layers.
 
+{\scriptsize
 \begin{verbatim}
-   TabularModel(
-   (embeds): ModuleList(
-     (0): Embedding(6, 4)
-     (1): Embedding(2, 2)
-     (2): Embedding(2, 2)
-     (3): Embedding(2, 2)
-     (4): Embedding(2, 2)
-     (5): Embedding(1532, 97)
-     (6): Embedding(8, 5)
-     (7): Embedding(8, 5)
-     (8): Embedding(13, 7)
-     (9): Embedding(6, 4)
-     (10): Embedding(31, 11)
-     (11): Embedding(5, 4)
-     (12): Embedding(5, 4)
-     (13): Embedding(3, 3)
-     (14): Embedding(3, 3)
-     (15): Embedding(3, 3)
-     (16): Embedding(3, 3)
-     (17): Embedding(3, 3)
-   )
-   (emb\_drop): Dropout(p=0.04, inplace=False)
-   (bn\_cont): BatchNorm1d(1, eps=1e-05, momentum=0.1, affine=True, track\_running\_stats=True)
-   (layers): Sequential(
-     (0): Linear(in\_features=165, out\_features=1000, bias=True)
-     (1): ReLU(inplace=True)
-     (2): BatchNorm1d(1000, eps=1e-05, momentum=0.1, affine=True, track\_running\_stats=True)
-     (3): Dropout(p=0.001, inplace=False)
-     (4): Linear(in\_features=1000, out\_features=500, bias=True)
-     (5): ReLU(inplace=True)
-     (6): BatchNorm1d(500, eps=1e-05, momentum=0.1, affine=True, track\_running\_stats=True)
-     (7): Dropout(p=0.01, inplace=False)
-     (8): Linear(in\_features=500, out\_features=1, bias=True)
-   )
- )
+TabularModel(
+  (embeds): ModuleList(
+    (0): Embedding(6, 4)
+    (1): Embedding(2, 2)
+    (2): Embedding(2, 2)
+    (3): Embedding(2, 2)
+    (4): Embedding(2, 2)
+    (5): Embedding(1532, 97)
+    (6): Embedding(8, 5)
+    (7): Embedding(8, 5)
+    (8): Embedding(13, 7)
+    (9): Embedding(6, 4)
+    (10): Embedding(31, 11)
+    (11): Embedding(5, 4)
+    (12): Embedding(5, 4)
+    (13): Embedding(3, 3)
+    (14): Embedding(3, 3)
+    (15): Embedding(3, 3)
+    (16): Embedding(3, 3)
+    (17): Embedding(3, 3)
+  )
+  (emb_drop): Dropout(p=0.04,
+                      inplace=False)
+  (bn_cont): BatchNorm1d(1,
+                         eps=1e-05,
+                         momentum=0.1,
+                         affine=True,
+                         track_running_stats=True)
+  (layers): Sequential(
+    (0): Linear(in_features=165,
+                out_features=1000,
+                bias=True)
+    (1): ReLU(inplace=True)
+    (2): BatchNorm1d(1000,
+                     eps=1e-05,
+                     momentum=0.1,
+                     affine=True,
+                     track_running_stats=True)
+    (3): Dropout(p=0.001,
+                 inplace=False)
+    (4): Linear(in_features=1000,
+                out_features=500,
+                bias=True)
+    (5): ReLU(inplace=True)
+    (6): BatchNorm1d(500,
+                     eps=1e-05,
+                     momentum=0.1,
+                     affine=True,
+                     track_running_stats=True)
+    (7): Dropout(p=0.01, inplace=False)
+    (8): Linear(in_features=500,
+                out_features=1,
+                bias=True)
+  )
+)
 \end{verbatim}
+}
 
 \subsection{Loss Functions/Forward Methods}
 There were two different options for the Forward functions. We tried both.
@@ -318,7 +390,7 @@ There were two different options for the Forward functions. We tried both.
   The loss for both the forward passes is a mean squared error loss function.
 
   \begin{equation}
-    MSE = \frac{1}{n}\sum{n} (y_i - \hat{y_i})^2
+    MSE = \frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y_i})^2
     \label{newEqn}
   \end{equation}
 
@@ -359,9 +431,6 @@ The relate work goes here
 % Discuss open questions, promising research directions
 The Summary Goes here
 
-%-------------------------------------------------------------------------
-\section{References}
-The References Goes here
 
 
 
@@ -369,115 +438,113 @@ The References Goes here
 
 
 
+% %-------------------------------------------------------------------------
+% \section{\LaTeX\ Reference Section}
+% \verb'\cvprfinalcopy' Is for different font
+
+% (e.g.\ this line is $095.5$)
+
+% An example of a bad paper:
+% \begin{quote}
+% \begin{center}
+%     An analysis of the frobnicatable foo filter.
+% \end{center}
+
+%    In this paper we present a performance analysis of our
+%    previous paper [1], and show it to be inferior to all
+%    previously known methods.  Why the previous paper was
+%    accepted without this analysis is beyond me.
+
+%    [1] Removed for blind review
+% \end{quote}
+
+% This is how you cite a reference submission~\cite{Authors06} as additional material and
+
+% \begin{quote}
+% and this is a quote and a another special formatting {\tt eccv06.pdf}.
+% \end{quote}
+
+% {\em require} more special formatting
+
+% ``Zero-g frobnication: How being the only people in the world with access to
+% the Apollo lander source code makes us a wow at parties'', by Zeus \etal.
+
+% FAQ: Are acknowledgements OK?  No.  Leave them for the final copy.
 
 
-%-------------------------------------------------------------------------
-\section{\LaTeX\ Reference Section}
-\verb'\cvprfinalcopy' Is for different font
+% \begin{figure}[t]
+%   \begin{center}
+%     \fbox{\rule{0pt}{2in} \rule{0.9\linewidth}{0pt}}
+%     % \includegraphics[width=0.8\linewidth]{img/meh.png}
+%   \end{center}
+%     \caption{Example of caption.  It is set in Roman so that mathematics
+%     (always set in Roman: $B \sin A = A \sin B$) may be included without an
+%     ugly clash.}
+%   \label{fig:long}
+%   \label{fig:onecol}
+% \end{figure}
 
-(e.g.\ this line is $095.5$)
+% \noindent
+% Compare the following:\\
+% \begin{tabular}{ll}
+%  \verb'$conf_a$' &  $conf_a$ \\
+%  \verb'$\mathit{conf}_a$' & $\mathit{conf}_a$
+% \end{tabular}\\
+% See The \TeX book, p165.
 
-An example of a bad paper:
-\begin{quote}
-\begin{center}
-    An analysis of the frobnicatable foo filter.
-\end{center}
+% The space after \eg, meaning ``for example'', should not be a
+% sentence-ending space. So \eg is correct, {\em e.g.} is not.  The provided
+% \verb'\eg' macro takes care of this.
 
-   In this paper we present a performance analysis of our
-   previous paper [1], and show it to be inferior to all
-   previously known methods.  Why the previous paper was
-   accepted without this analysis is beyond me.
+% When citing a multi-author paper, you may save space by using ``et alia'',
+% shortened to ``\etal'' (not ``{\em et.\ al.}'' as ``{\em et}'' is a complete word.)
 
-   [1] Removed for blind review
-\end{quote}
-
-This is how you cite a reference submission~\cite{Authors06} as additional material and
-
-\begin{quote}
-and this is a quote and a another special formatting {\tt eccv06.pdf}.
-\end{quote}
-
-{\em require} more special formatting
-
-``Zero-g frobnication: How being the only people in the world with access to
-the Apollo lander source code makes us a wow at parties'', by Zeus \etal.
-
-FAQ: Are acknowledgements OK?  No.  Leave them for the final copy.
-
-
-\begin{figure}[t]
-  \begin{center}
-    \fbox{\rule{0pt}{2in} \rule{0.9\linewidth}{0pt}}
-    % \includegraphics[width=0.8\linewidth]{img/meh.png}
-  \end{center}
-    \caption{Example of caption.  It is set in Roman so that mathematics
-    (always set in Roman: $B \sin A = A \sin B$) may be included without an
-    ugly clash.}
-  \label{fig:long}
-  \label{fig:onecol}
-\end{figure}
-
-\noindent
-Compare the following:\\
-\begin{tabular}{ll}
- \verb'$conf_a$' &  $conf_a$ \\
- \verb'$\mathit{conf}_a$' & $\mathit{conf}_a$
-\end{tabular}\\
-See The \TeX book, p165.
-
-The space after \eg, meaning ``for example'', should not be a
-sentence-ending space. So \eg is correct, {\em e.g.} is not.  The provided
-\verb'\eg' macro takes care of this.
-
-When citing a multi-author paper, you may save space by using ``et alia'',
-shortened to ``\etal'' (not ``{\em et.\ al.}'' as ``{\em et}'' is a complete word.)
-
-For this citation style, keep multiple citations in numerical (not
-chronological) order, so prefer \cite{Alpher03,Alpher02,Authors06} to
-\cite{Alpher02,Alpher03,Authors06}.
+% For this citation style, keep multiple citations in numerical (not
+% chronological) order, so prefer \cite{Alpher03,Alpher02,Authors06} to
+% \cite{Alpher02,Alpher03,Authors06}.
 
 
 
 
 
-This is fractions text area is $6\frac78$ inches (17.5 cm) wide by $8\frac78$
-and more $\frac{5}{16}$ and other $8.5 \times 11$-inch
+% This is fractions text area is $6\frac78$ inches (17.5 cm) wide by $8\frac78$
+% and more $\frac{5}{16}$ and other $8.5 \times 11$-inch
 
-Reference figurers Figures~\ref{fig:onecol} and~\ref{fig:short}.  Short captions should be centred.
+% Reference figurers Figures~\ref{fig:onecol} and~\ref{fig:short}.  Short captions should be centred.
 
-\noindent For no indent
+% \noindent For no indent
 
-FIRST-ORDER HEADINGS. (For example, {\large \bf 1. Introduction})
+% FIRST-ORDER HEADINGS. (For example, {\large \bf 1. Introduction})
 
-SECOND-ORDER HEADINGS. (For example, { \bf 1.1. Database elements})
+% SECOND-ORDER HEADINGS. (For example, { \bf 1.1. Database elements})
 
-Please use footnotes\footnote {This is what a footnote looks like.  It
-often distracts the reader from the main flow of the argument.} sparingly.
+% Please use footnotes\footnote {This is what a footnote looks like.  It
+% often distracts the reader from the main flow of the argument.} sparingly.
 
-\begin{table}
-  \begin{center}
-    \begin{tabular}{|l|c|}
-      \hline
-      Method & Frobnability \\
-      \hline\hline
-      Theirs & Frumpy \\
-      Yours & Frobbly \\
-      Ours & Makes one's heart Frob\\
-      \hline
-    \end{tabular}
-  \end{center}
-  \caption{Results.   Ours is better.}
-\end{table}
+% \begin{table}
+%   \begin{center}
+%     \begin{tabular}{|l|c|}
+%       \hline
+%       Method & Frobnability \\
+%       \hline\hline
+%       Theirs & Frumpy \\
+%       Yours & Frobbly \\
+%       Ours & Makes one's heart Frob\\
+%       \hline
+%     \end{tabular}
+%   \end{center}
+%   \caption{Results.   Ours is better.}
+% \end{table}
 
-When placing figures in \LaTeX, it's almost always best to use
-\verb+\includegraphics+, and to specify the  figure width as a multiple of
-the line width as in the example below
-{\small\begin{verbatim}
-   \usepackage[dvips]{graphicx} ...
-   \includegraphics[width=0.8\linewidth]
-                   {myfile.eps}
-\end{verbatim}
-}
+% When placing figures in \LaTeX, it's almost always best to use
+% \verb+\includegraphics+, and to specify the  figure width as a multiple of
+% the line width as in the example below
+% {\small\begin{verbatim}
+%    \usepackage[dvips]{graphicx} ...
+%    \includegraphics[width=0.8\linewidth]
+%                    {myfile.eps}
+% \end{verbatim}
+% }
 
 
 {\small
