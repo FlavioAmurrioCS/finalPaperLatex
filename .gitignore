@@ -7,6 +7,6 @@
 *.fdb_latexmk
 *.fls
 *.log
-*.pdf
+# *.pdf
 *.synctex.gz
 __latexindent_temp.tex
