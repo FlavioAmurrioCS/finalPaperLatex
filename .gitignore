@@ -9,3 +9,4 @@
 *.log
 *.pdf
 *.synctex.gz
+__latexindent_temp.tex
