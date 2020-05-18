@@ -36,12 +36,12 @@ George Mason University\\
 %%%%%%%%% ABSTRACT
 \begin{abstract}
 % Problem, gap, approach, key results
-   The ``M5 Forecasting - Accuracy: Estimate the unit sales of Walmart retail
-   goods'' competition (will be referred as the ``M5 Forecasting Competition''
-   and ``The Competition'') challenged Kaggle users to design a learning model
-   that would be able to predict how many of a certain item would be sold
-   on a given day. In this paper we embark in the challenge to create such a
-   model and improve on current strategies.
+  The ``M5 Forecasting - Accuracy: Estimate the unit sales of Walmart retail
+  goods'' competition (will be referred as the ``M5 Forecasting Competition''
+  and ``The Competition'') challenged Kaggle users to design a learning model
+  that would be able to predict how many of a certain item would be sold
+  on a given day. In this paper we embark in the challenge to create such a
+  model and improve on current strategies.
 \end{abstract}
 
 %%%%%%%%% BODY TEXT
@@ -50,8 +50,25 @@ George Mason University\\
 % scientific gap(what technical aspects have not yet been solved)
 % summary approach (should include reference to technical gap)
 % key results
-
 The introduction goes here.
+
+The M5 Forecasting competition was created on Kaggle by ``The Makridakis Open
+Forecasting Center (MOFC) at the University of Nicosia''. This was done with the
+
+Inaccurate business forecasts could result in actual or opportunity losses.
+The main goal is to calculate how much of a certain item will one store sell each month in a
+year
+Competition aims to achieve more accurate and better calibrated forecasts, reduce waste
+and be able to appreciate uncertainty and its risk implications.
+This competition uses a Weighted Root Mean Squared Scaled Error (RMSSE).(Lower
+score is better)
+
+
+\subsection{Data}
+\subsection{Intuition}
+
+
+
 
 
 %-------------------------------------------------------------------------
@@ -59,6 +76,17 @@ The introduction goes here.
 % Background tutorial (if necessary)
 % Your technical innovation (might be multiple pages/sections, with repeated reference to scientific gap)
 The Approach goes here.
+
+
+\begin{itemize}
+  \item Resisted using Random Forest/XGBoost because it wouldn’t fit the theme of the class Deep Learning
+  \item Data preparation
+  \item Too Huge, out of memory. Partitioned into 4 pieces
+  % \item Merged calendar sell_prices and a modified sales_train_validation
+
+\end{itemize}
+
+
 
 %-------------------------------------------------------------------------
 \section{Results}
