@@ -38,19 +38,19 @@ George Mason University\\
 % Problem, gap, approach, key results
   Methods based on decision trees dominate the field of tabular regressional
   problems and have shown to outperform many other methods, such as weighted
-  averaging and other outperforming methods that
-  are natively time-series based on using networks such as LSTM/GRU. In this
-  report, we plan to test out a pure Deep Learning approach which leverages key
-  foundational concepts in both supervised and unsupervised learning to attempt to
-  reach an acceptable score with minimum data manipulation, and virtually no
-  data gathering and/or wrangling.
+  averaging and other outperforming methods that are natively time-series based
+  on using networks such as LSTM/GRU. In this report, we plan to test out a pure
+  Deep Learning approach which leverages key foundational concepts in both
+  supervised and unsupervised learning to attempt to reach an acceptable score
+  with minimum data manipulation, and virtually no data gathering and/or
+  wrangling.
 
   The ``M5 Forecasting - Accuracy: Estimate the unit sales of Walmart retail
-  goods'' competition (which will be referred to as the ``M5 Forecasting Competition''
-  and/or ``The Competition'') challenged Kaggle users to design a learning model
-  that would be able to predict how many of a certain item would be sold on a
-  given day. In this paper, we embark on the challenge to create such a model
-  and improve on current strategies.
+  goods'' competition (which will be referred to as the ``M5 Forecasting
+  Competition'' and/or ``The Competition'') challenged Kaggle users to design a
+  learning model that would be able to predict how many of a certain item would
+  be sold on a given day. In this paper, we embark on the challenge to create
+  such a model and improve on current strategies.
 
 \end{abstract}
 
@@ -225,8 +225,8 @@ a server computer, therefore we partitioned the data and then concatenated it
 together. Once we had access to a server computer with 128GB of RAM, we were
 able to load the dataset into memory. Loading the file into a Pandas' dataframe
 took over 4 minutes. However, after manually typing the Pandas' columns to
-smaller data types, the loading time decreased to an estimated 3-4 minutes. The types were
-define as shown on Table \ref{typesTable}
+smaller data types, the loading time decreased to an estimated 3-4 minutes. The
+types were define as shown on Table \ref{typesTable}
 
 \begin{table}[]
   \begin{center}
@@ -252,14 +252,14 @@ define as shown on Table \ref{typesTable}
 
 
 \subsection{Model/Data}
-The model we used was a tabular model from a popular repository on GitHub~\cite{fastai_2020},
-https://github.com/fastai/fastai. The underlying details worked as in the corresponding manner:
-first, we
-defined the dataset to be fed to the model as a TabularDataBunch, which is a
-hierarchical abstraction to the Dataloader and Dataset classes and manipulation
-as given in PyTorch for tabular datasets. It bunches the data up to be trained
-upon, customized, and assists with preprocessing. Our sales.csv conformed to
-what was specified by the PyTorch API and was loaded successfully. The DataBunch API allowed us to fill in
+The model we used was a tabular model from a popular repository on
+GitHub~\cite{fastai_2020}, https://github.com/fastai/fastai. The underlying
+details worked as in the corresponding manner: first, we defined the dataset to
+be fed to the model as a TabularDataBunch, which is a hierarchical abstraction
+to the Dataloader and Dataset classes and manipulation as given in PyTorch for
+tabular datasets. It bunches the data up to be trained upon, customized, and
+assists with preprocessing. Our sales.csv conformed to what was specified by the
+PyTorch API and was loaded successfully. The DataBunch API allowed us to fill in
 the previously mentioned data such as pricing, by using the median of the values
 across the column. We also normalize the pricing column using standardization.
 The prices ranged from \$0.01 to \$107.32, before standardization.
@@ -283,19 +283,19 @@ The prices ranged from \$0.01 to \$107.32, before standardization.
   for categorical variables during training that can be referenced during
   evaluations. Then subsequent layers are defined to learn the interaction
   between these embeddings and the dependent variable, i.e. sales. It contains
-  BatchNorm layers to speed up training as well as adding an extra layer
-  against overfitting, and a ReLU layer for nonlinearity. The dropout rate can
-  be specified for both embeddings and the subsequent layers.
+  BatchNorm layers to speed up training as well as adding an extra layer against
+  overfitting, and a ReLU layer for nonlinearity. The dropout rate can be
+  specified for both embeddings and the subsequent layers.
 
   Embeddings can have a vector size associated with them, and this is defined
   from a heuristic that the authors seem to have come up with through empirical
-  means. The embeddings also have an extra size to their number of
-  categories, in order to have another vector for an unknown field that is
-  encountered, i.e. \#na.
+  means. The embeddings also have an extra size to their number of categories,
+  in order to have another vector for an unknown field that is encountered, i.e.
+  \#na.
 
-  Below is a view of the model of the best results from our Kaggle submissions, as
-  we have tried increasing the layers on the model to no avail, perhaps due to
-  the limited training time we had. Again, the Embeddings are for our
+  Below is a view of the model of the best results from our Kaggle submissions,
+  as we have tried increasing the layers on the model to no avail, perhaps due
+  to the limited training time we had. Again, the Embeddings are for our
   categorical variables + \#na, whereas our only continuous variable
   ‘sell\_prices' is fed in as the normalized value directly. The method to do it
   is that in the forward pass of the model, it takes all the vectors of the
@@ -383,10 +383,10 @@ There were two different options for the Forward functions. We tried both.
   the output being close to each other, especially when paired with a method of
   logging the dependent variable and inverting the logging for submission.
   However, the mean(1.0312) and scale(0-763) of the dependent variable was not
-  appropriate for this forward pass. The intuition is that the Sigmoid function tends to
-  saturate towards 0 and 1, and having outliers that raises the scale makes it a
-  harder task for the Neural Network. The results, as will be discussed in the
-  Results/Extras section demostrate this.
+  appropriate for this forward pass. The intuition is that the Sigmoid function
+  tends to saturate towards 0 and 1, and having outliers that raises the scale
+  makes it a harder task for the Neural Network. The results, as will be
+  discussed in the Results/Extras section demostrate this.
 
   The loss for both forward passes is a Mean Squared Error Loss function.
 
@@ -407,9 +407,11 @@ There were two different options for the Forward functions. We tried both.
   we took a much more scientific approach as given from the API of fastai. We
   used a learning rate finder algorithm, which employs a callback while
   increasing the learning rate, to see when the losses would diverge. Then we
-  take the learning rate right before the diversion, and scale it down by the desired factor and choose that as the learning rate. For larger datasets per
-  epoch, e.g. $>$ 60 million entries, one might choose the far left of the graph,
-  whereas in regular cases it’s recommended to scale down by a factor of 10-100.
+  take the learning rate right before the diversion, and scale it down by the
+  desired factor and choose that as the learning rate. For larger datasets per
+  epoch, e.g. $>$ 60 million entries, one might choose the far left of the
+  graph, whereas in regular cases it’s recommended to scale down by a factor of
+  10-100.
 
   \begin{figure}[]
     \centering
@@ -431,8 +433,8 @@ There were two different options for the Forward functions. We tried both.
   momentum, in order to not tack on too much at the high levels of the learning
   rate curve and gradually let it pick up enough during the transition to the
   lower learning rate. When the learning rate peaks, it can throw the neural
-  network out of local maximas, due to some parts of the parameter having possibly
-  diverged, and then when the learning rate anneals down, the network
+  network out of local maximas, due to some parts of the parameter having
+  possibly diverged, and then when the learning rate anneals down, the network
   zones in to converge to what’s hopefully a good medium. We found running two
   cycles with 1 epoch each worked best, since each epoch contained too many
   iterations and found keeping the learning rate high for too long made the
@@ -472,8 +474,8 @@ Respective dropouts: 0.05, 0.1, 0.2
 Embedding dropout: 0.1
     \end{verbatim}}
   \end{center}
-  \caption{Models with labels that we applied the log function to, then inverse at
-  evaluation/submission time.}
+  \caption{Models with labels that we applied the log function to, then inverse
+  at evaluation/submission time.}
 \end{table}
 
 \begin{table}[]
