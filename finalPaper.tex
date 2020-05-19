@@ -19,6 +19,11 @@
 %%%%%%%%% TITLE
 \title{M5 Forecasting - Accuracy: Estimate the unit sales of Walmart retail goods}
 
+% \author{Flavio Amurrio-Moya and Pyoung Kang Kim\\
+% George Mason University\\
+% 4400 University Dr, Fairfax, VA 22030\\
+% {\tt\small Email: famurrio@gmu.edu, pkim23@gmu.edu}
+% }
 \author{Flavio Amurrio-Moya\\
 George Mason University\\
 4400 University Dr, Fairfax, VA 22030\\
@@ -29,6 +34,18 @@ George Mason University\\
 4400 University Dr, Fairfax, VA 22030\\
 {\tt\small pkim23@gmu.edu}
 }
+
+% \author{
+%   \IEEEauthorblockN{
+%     Flavio Amurrio-Moya\IEEEauthorrefmark{1},
+%     and Pyoung Kang Kim\IEEEauthorrefmark{2}
+%   }
+%   \IEEEauthorblockA{
+%     Department of Whatever,
+%     Whichever University\\
+%     Wherever\\
+%   Email: \IEEEauthorrefmark{1}famurrio@gmu.edu,
+% \IEEEauthorrefmark{2}pkim23@gmu.edu}}
 
 \maketitle
 \thispagestyle{empty}
@@ -86,38 +103,27 @@ price, promotions, day of the week, and special events.
   used for training.\cite{kaggle}
 
   \noindent {\bf calendar.csv} - information regarding dates of product sales.
-{\small\begin{verbatim}
-schema: date, wm_yr_wk, weekday, wday, month,
-        year, d, event_name_1, event_type_1,
-        event_name_2, event_type_2, snap_CA,
-        snap_TX, snap_WI
-
+{\scriptsize\begin{verbatim}
+schema: date, wm_yr_wk, weekday, wday, month, year, d,
+        event_name_1, event_type_1, event_name_2,
+        event_type_2, snap_CA, snap_TX, snap_WI
 row: 2011-01-29, 11101, Saturday, 1, 1, 2011,
      d_1, , , , , 0 , 0 , 0
 \end{verbatim}}
 
-  % \noindent schema - date, wm\_yr\_wk, weekday, wday, month, year, d, event\_name\_1,
-  % event\_type\_1, event\_name\_2, event\_type\_2, snap\_CA, snap\_TX, snap\_WI
-
-  % \noindent row - 2011-01-29, 11101, Saturday, 1, 1, 2011, d\_1, , , , , 0 , 0 , 0
-
-
   \noindent {\bf sales\_train\_validation.csv} - actual sales respective to date ‘d’, by hierarchical data.
-  {\small\begin{verbatim}
+  {\scriptsize\begin{verbatim}
 schema: id, item_id, dept_id, cat_id,
         store_id, state_id, d_1,...d_1913
-
-row: HOBBIES_1_001_CA_1_validation,
-     HOBBIES_1_001, HOBBIES_1, HOBBIES,
-     CA_1, CA, 0, ...1
+row: HOBBIES_1_001_CA_1_validation, HOBBIES_1_001,
+     HOBBIES_1, HOBBIES, CA_1, CA, 0, ...1
   \end{verbatim}}
 
 
   \noindent {\bf sell\_prices.csv} - prices of products per a certain store and date
 
-  {\small\begin{verbatim}
+  {\scriptsize\begin{verbatim}
 schema: store_id, item_id, wm_yr_wk, sell_price
-
 row: CA_1, HOBBIES_1_001, 11325, 9.58
   \end{verbatim}}
 
@@ -126,51 +132,51 @@ row: CA_1, HOBBIES_1_001, 11325, 9.58
 \subsection{Closer Look At The Data}
   Graphing the data allows us to visualize some of the shopping trends.
 
-\begin{figure*}
+\begin{figure}
   \begin{center}
     % \fbox{\rule{0pt}{2in} \rule{.9\linewidth}{0pt}}
-    \includegraphics[width=0.8\linewidth]{img/totalItemSoldofEachCategory.png}
+    \includegraphics[width=0.7\linewidth]{img/totalItemSoldofEachCategory.png}
   \end{center}
   \caption{Total items sold of each category.\cite{ryuheeeei_2020}}
   \label{fig:totalItemSoldofEachCategory}
-\end{figure*}
+\end{figure}
   In Figure~\ref{fig:totalItemSoldofEachCategory} we can visualize the number of
   items per category. We can see a certain drop towards the end of each year
   which we'll see in later graphs.
 
-\begin{figure*}
+\begin{figure}
   \begin{center}
     % \fbox{\rule{0pt}{2in} \rule{.9\linewidth}{0pt}}
-    \includegraphics[width=0.8\linewidth]{img/totalSoldItemPerDayDec2015.png}
+    \includegraphics[width=0.7\linewidth]{img/totalSoldItemPerDayDec2015.png}
   \end{center}
     \caption{Total items sold per day in December 2015.\cite{ryuheeeei_2020}}
   \label{fig:totalSoldItemPerDayDec2015}
-\end{figure*}
+\end{figure}
   Figure~\ref{fig:totalSoldItemPerDayDec2015} shows the sales for the month of
   December in 2015. Here it shows that the day of the drop is December 25 which
   is Christmas Day.
 
-\begin{figure*}
+\begin{figure}
   \begin{center}
     % \fbox{\rule{0pt}{2in} \rule{.9\linewidth}{0pt}}
-    \includegraphics[width=0.8\linewidth]{img/totalSoldItemInEachDayOfWeek.png}
+    \includegraphics[width=0.7\linewidth]{img/totalSoldItemInEachDayOfWeek.png}
   \end{center}
     \caption{Total items sold each day of the week. \cite{ryuheeeei_2020}}
   \label{fig:totalSoldItemInEachDayOfWeek}
-\end{figure*}
+\end{figure}
   Figure~\ref{fig:totalSoldItemInEachDayOfWeek} shows the number of items sold
   per day of the week. Here we can see how people tend to do grocery shopping on
   weekends and sales are lower towards the middle of the week. This correlates
   to many stores doing restock on Tuesdays.
 
-\begin{figure*}
+\begin{figure}
   \begin{center}
     % \fbox{\rule{0pt}{2in} \rule{.9\linewidth}{0pt}}
-    \includegraphics[width=0.8\linewidth]{img/totalItemSoldInEachState.png}
+    \includegraphics[width=0.7\linewidth]{img/totalItemSoldInEachState.png}
   \end{center}
     \caption{Total items sold in each state.\cite{ryuheeeei_2020}}
   \label{fig:totalItemSoldInEachState}
-\end{figure*}
+\end{figure}
   Lastly, Figure~\ref{fig:totalItemSoldInEachState} graphs the items sold in
   California, Texas and Wisconsin showing, as we should expect, that a bigger
   population means more sales.
@@ -194,18 +200,15 @@ row: CA_1, HOBBIES_1_001, 11325, 9.58
 \noindent {\bf sales.csv} - training file for the neural network, containing
 labels and its respective metadata.
 
-{\small\begin{verbatim}
-schema: sales, id, item_id, dept_id, cat_id,
-        store_id, state_id, d, date,
-        wm_yr_wk, weekday, wday, month,
-        year, event_name_1, event_type_1,
-        event_name_2, event_type_2, snap_CA,
-        snap_TX, snap_WI, sell_price
-
-row: 0, HOBBIES_1_001_CA_1_validation,
-     HOBBIES_1_001, HOBBIES_1, HOBBIES, CA_1,
-     CA, d_1, 2011-01-29, 11101, Saturday, 1,
-     1, 2011, , , , , 0, 0, 0,
+{\scriptsize\begin{verbatim}
+schema: sales, id, item_id, dept_id, cat_id, store_id,
+        state_id, d, date, wm_yr_wk, weekday, wday,
+        month, year, event_name_1, event_type_1,
+        event_name_2, event_type_2, snap_CA, snap_TX,
+        snap_WI, sell_price
+row: 0, HOBBIES_1_001_CA_1_validation, HOBBIES_1_001,
+     HOBBIES_1, HOBBIES, CA_1, CA, d_1, 2011-01-29,
+     11101, Saturday, 1, 1, 2011, , , , , 0, 0, 0,
 \end{verbatim}}
 
 
@@ -228,22 +231,22 @@ took over 4 minutes. However, after manually typing the Pandas' columns to
 smaller data types, the loading time decreased to an estimated 3-4 minutes. The
 types were define as shown on Table \ref{typesTable}
 
+
 \begin{table}[]
   \begin{center}
+    \tabcolsep=0.11cm
     \begin{tabular}{|l|l|}
       \hline
-            Column Name & Type \\
-      \hline\hline
-      snap\_CA & int8 \\
-      snap\_TX & int8 \\
-      snap\_WI & int8 \\
-      sales & float32 \\
-      wm\_yr\_wk & int16 \\
-      wday & int8 \\
-      month & int8 \\
-      year & int8 \\
-      sell\_price & float32 \\
-      \hline
+      Column Name & Type    \\ \hline
+      snap\_CA    & int8    \\ \hline
+      snap\_TX    & int8    \\ \hline
+      snap\_WI    & int8    \\ \hline
+      sales       & float32 \\ \hline
+      wm\_yr\_wk  & int16   \\ \hline
+      wday        & int8    \\ \hline
+      month       & int8    \\ \hline
+      year        & int8    \\ \hline
+      sell\_price & float32 \\ \hline
     \end{tabular}
   \end{center}
   \label{typesTable}\
@@ -324,42 +327,25 @@ TabularModel(
     (14): Embedding(3, 3)
     (15): Embedding(3, 3)
     (16): Embedding(3, 3)
-    (17): Embedding(3, 3)
-  )
-  (emb_drop): Dropout(p=0.04,
-                      inplace=False)
-  (bn_cont): BatchNorm1d(1,
-                         eps=1e-05,
-                         momentum=0.1,
-                         affine=True,
-                         track_running_stats=True)
+    (17): Embedding(3, 3))
+  (emb_drop): Dropout(p=0.04, inplace=False)
+  (bn_cont): BatchNorm1d(1, eps=1e-05, momentum=0.1,
+  						 affine=True,
+  						 track_running_stats=True)
   (layers): Sequential(
-    (0): Linear(in_features=165,
-                out_features=1000,
+    (0): Linear(in_features=165, out_features=1000,
                 bias=True)
     (1): ReLU(inplace=True)
-    (2): BatchNorm1d(1000,
-                     eps=1e-05,
-                     momentum=0.1,
-                     affine=True,
-                     track_running_stats=True)
-    (3): Dropout(p=0.001,
-                 inplace=False)
-    (4): Linear(in_features=1000,
-                out_features=500,
+    (2): BatchNorm1d(1000, eps=1e-05, momentum=0.1,
+                     affine=True, track_running_stats=True)
+    (3): Dropout(p=0.001, inplace=False)
+    (4): Linear(in_features=1000, out_features=500,
                 bias=True)
     (5): ReLU(inplace=True)
-    (6): BatchNorm1d(500,
-                     eps=1e-05,
-                     momentum=0.1,
-                     affine=True,
-                     track_running_stats=True)
+    (6): BatchNorm1d(500, eps=1e-05, momentum=0.1,
+                     affine=True, track_running_stats=True)
     (7): Dropout(p=0.01, inplace=False)
-    (8): Linear(in_features=500,
-                out_features=1,
-                bias=True)
-  )
-)
+    (8): Linear(in_features=500, out_features=1, bias=True)))
 \end{verbatim}
 }
 
@@ -381,7 +367,7 @@ There were two different options for the Forward functions. We tried both.
 
   This method is particularly useful when you are more interested in ratios of
   the output being close to each other, especially when paired with a method of
-  logging the dependent variable and inverting the logging for submission.
+  log function the dependent variable and inverting the log function for submission.
   However, the mean(1.0312) and scale(0-763) of the dependent variable was not
   appropriate for this forward pass. The intuition is that the Sigmoid function
   tends to saturate towards 0 and 1, and having outliers that raises the scale
@@ -415,7 +401,7 @@ There were two different options for the Forward functions. We tried both.
 
   \begin{figure}[]
     \centering
-    \includegraphics[width=0.8\linewidth]{img/learningRate.png}
+    \includegraphics[width=0.7\linewidth]{img/learningRate.png}
     % \caption{}
     \label{learningRate}
   \end{figure}
@@ -461,6 +447,7 @@ There were two different options for the Forward functions. We tried both.
 
 \begin{table}[]
   \begin{center}
+    \tabcolsep=0.11cm
     \begin{tabular}{|l|l|l|l|}
     \hline
                       & first.pth & second.pth & third.pth \\ \hline
@@ -484,6 +471,7 @@ Embedding dropout: 0.1
 
 \begin{table}[]
   \begin{center}
+    \tabcolsep=0.11cm
     \begin{tabular}{|l|l|l|}
     \hline
                       & a1.pth   & a2.pth   \\ \hline
@@ -506,6 +494,7 @@ Embedding dropout: 0.04
 
 \begin{table}[]
   \begin{center}
+    \tabcolsep=0.11cm
     \begin{tabular}{|l|l|l|}
     \hline
                       & b1.pth   & b2.pth   \\ \hline
@@ -528,20 +517,82 @@ Embedding dropout: 0.1
 
 \begin{table}[]
   \begin{center}
+    \tabcolsep=0.11cm
     \begin{tabular}{|l|l|l|l|}
     \hline
-                      & k1.pth  & p.pth   & p1.pth  \\ \hline
-    Learning Rate     & 1e-6    & 1e-5    & 1e-5    \\ \hline
-    Epochs            & 1       & 1       & 1       \\ \hline
-    WD                & 0.1     & 0.1     & 0.1     \\ \hline
-    Results on Kaggle & 6.23465 & 5.36372 & 5.36372 \\ \hline
+                      & k1.pth   \\ \hline
+    Learning Rate     & 1e-6     \\ \hline
+    Epochs            & 1        \\ \hline
+    WD                & 0.1      \\ \hline
+    Results on Kaggle & 6.23465  \\ \hline
+    Train Loss        & 6.390317 \\ \hline
+    Valid Loss        & 7.435205 \\ \hline
     \end{tabular}
   \end{center}
-  \caption{Models using the sigmoid * range forward function Same layer,dropout
+  \caption{Models using the sigmoid X range forward function. Same layer,dropout
   setting as previous, however k1.pth scaled the max dep var to be ½ of actual
   max}
 \end{table}
 
+\begin{table}[]
+  \begin{center}
+    \tabcolsep=0.11cm
+    \begin{tabular}{|l|l|l|}
+    \hline
+                      & x1.pth    \\ \hline
+    Learning Rate     & 1e-5      \\ \hline
+    Epochs            & 1         \\ \hline
+    WD                & 0.1       \\ \hline
+    Results on Kaggle & 1.26177   \\ \hline
+    Train Loss        & 8.363554  \\ \hline
+    Valid Loss        & 6.301562  \\ \hline
+    \end{tabular}
+    {\scriptsize
+    \begin{verbatim}
+Linear Layers: (165, 1000), (1000, 500), (500, 1)
+Respective dropouts: 0.001, 0.01
+Embedding dropout: 0.04
+    \end{verbatim}}
+  \end{center}
+  \caption{Above it doesn’t scale max dependant variable.}
+\end{table}
+
+\begin{figure}[]
+  \centering
+  \includegraphics[width=0.7\linewidth]{img/leaderBoard.png}
+  \includegraphics[width=0.7\linewidth]{img/submission.png}
+  \caption{Screenshot of current leaderboard and our submissions.}
+\end{figure}
+
+% \begin{figure}[]
+%   \centering
+%   \includegraphics[width=0.7\linewidth]{img/learningRate.png}
+%   % \caption{}
+%   \label{learningRate}
+% \end{figure}
+
+  a2.pth which gave the best results with a score of 0.94467 vs the top
+  leaderboard which was top 80\% of the competition.
+
+  It turns out that using a sigmoid * range forward pass isn’t a good idea for
+  this exercise due to the range and mean of the labels(dependant variables). It
+  performed okay, but when less optimal vs the regular forward pass.
+
+  It also turned out that log function the labels was a horrible idea, with giving
+  some of the worst scores. This is because lod function is great for getting ratios
+  of outputs to be similar, however the ratios are not significant enough due to
+  the mean of the sales being around 1 and the entire range being quite small.
+  If sales was a uniform distribution of ranges 0-10000, this would make more
+  sense, especially if the metric for evaluation was RMSLE.
+
+  a2.pth displays that minimizing regularization helped in this competition, as
+  well as having lesser depth to the Neural Network vs the other models. This
+  could be due to the time constraint on training imposed by the research
+  deadline, whereas the other deeper models could outperform this model with
+  longer training. One interesting find was that the validation loss was higher
+  for a2.pth vs a1.pth, however the training loss was smaller. This find hints
+  that the validation set might not truly reflect the test set, even though we
+  selected the last
 
 %-------------------------------------------------------------------------
 \section{Related Work}
@@ -572,7 +623,6 @@ memory. We also covered how to deal with missing data and turn a dataset into
 something feedable for a deep learning model to learn on.
 
 
-Contribution: 50\% Pyoung Kang Kim, 50\% Flavio Amurrio-Moya
 
 
 
@@ -619,7 +669,7 @@ Contribution: 50\% Pyoung Kang Kim, 50\% Flavio Amurrio-Moya
 % \begin{figure}[t]
 %   \begin{center}
 %     \fbox{\rule{0pt}{2in} \rule{0.9\linewidth}{0pt}}
-%     % \includegraphics[width=0.8\linewidth]{img/meh.png}
+%     % \includegraphics[width=0.7\linewidth]{img/meh.png}
 %   \end{center}
 %     \caption{Example of caption.  It is set in Roman so that mathematics
 %     (always set in Roman: $B \sin A = A \sin B$) may be included without an
@@ -685,15 +735,19 @@ Contribution: 50\% Pyoung Kang Kim, 50\% Flavio Amurrio-Moya
 % the line width as in the example below
 % {\small\begin{verbatim}
 %    \usepackage[dvips]{graphicx} ...
-%    \includegraphics[width=0.8\linewidth]
+%    \includegraphics[width=0.7\linewidth]
 %                    {myfile.eps}
 % \end{verbatim}
 % }
+
 
 
 {\small
 \bibliographystyle{ieee}
 \bibliography{egbib}
 }
+
+\noindent Contribution: 50\% Pyoung Kang Kim, 50\% Flavio Amurrio
+
 
 \end{document}
