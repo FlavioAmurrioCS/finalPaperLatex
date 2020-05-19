@@ -440,7 +440,11 @@ There were two different options for the Forward functions. We tried both.
   iterations and found keeping the learning rate high for too long made the
   network a bit less optimal.
 
-  Each epoch took roughly 4-5 hours to run.
+  Each epoch took roughly 4-5 hours to run. We have selected the validation set
+  to all the entries with dates greater than 2016, 3, 22. The result was roughly
+  the last month of the time series, and about 2\% of the whole dataset. We were
+  interested in the latest dates due to the fact the test set on kaggle tests on
+  dates past this.
 
   The training was done for different sets of hyper parameters and tweaks, as
   shown under Results/Trials.
@@ -542,13 +546,34 @@ Embedding dropout: 0.1
 %-------------------------------------------------------------------------
 \section{Related Work}
 % Dont just say whats been done. Point out how prior work relates to yours and to the scientific gap you set forth in the intro.
-The relate work goes here
+Related works involve kaggle notebooks showing algorithms built on top of
+decision trees, such as Random Forests and Gradient Boosting. There are other
+related works that compares the two types of models such as
+https://www.martinalarcon.org/2018-12-31-b-water-pumps/ \cite{martin-alarcon}.
+However, we decided to do a comprehensive outline and trials of the purely Deep
+Learning approach in this report, and test out various modifications that we
+couldn’t discover or find information and insights on in the internet.
+
 
 %-------------------------------------------------------------------------
 \section{Summary/Discussion/Conclusion}
 % Summary problem, approach, result, in past tense
 % Discuss open questions, promising research directions
-The Summary Goes here
+The Deep Learning method, although didn’t outperform the top competitors, shows
+potential. With proper tuning, data collection and validation set, it can most
+definitely improve it’s predictive capabilities.
+
+Here we identified within the constraints of time and data, what would be the
+ideal settings for getting a performant deep learning model. We explored
+different learning rates, regularization settings, depth of network, different
+forward passes and scaling of the dependent variable, dealing with missing data,
+as well as how to load and work with bigger datasets that require intensive
+memory. We also covered how to deal with missing data and turn a dataset into
+something feedable for a deep learning model to learn on.
+
+
+Contribution: 50\% Pyoung Kang Kim, 50\% Flavio Amurrio-Moya
+
 
 
 
