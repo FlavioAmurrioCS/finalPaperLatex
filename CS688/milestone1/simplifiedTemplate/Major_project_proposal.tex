@@ -10,124 +10,173 @@
 
 \maketitle
 
-% \begin{abstract}
-%   % Problem, gap, approach, key results
-%   Human Pose estimation has made great innocations in recent years. This in thanks to the advances of Deep Neural Nerworks.
-%   We will attempt to leverage these findings and apply for a
-
-% \end{abstract}
-
-\section{Introduction}
-In recent years, the application of Human Pose Estimation has progressed exponentially in terms of speed and accuracy.  From being able to detected simple 2D poses of one person at the time to real time multi person detection in videos, this rapid evolution is mainly thanks to the advances of Deep Neural Networks, which help with the detections on body part sections and joints within the human body. In lieu of this, [...](topic) began originally as a means to [...] before its broader application into healthcare, entertainment, and videography in general. This document will seek to explain Human Pose Estimation(topic)'s history, its conception and progression according to the latest research, as well as its shortcomings and controversy stirred by its impact on the discipline of [...] and [...].
-The origin of Pose Estimation was first brought about by [...] in [...]. During this time, there was a strong need for [...] which prompted hastened research in [...] which was an already emerging topic because of [...]. With [...](originator)'s idea/With the idea of [...], [...](topic) would be able to resolve the shortcomings of [...], and thus [...](topic) began to gain interest and influence. Perhaps the greatest influence (and possible funding [...](citation)) came from the entertainment industry. As more and more realistic forms of cinematography advanced in the late 1990s and early 2000s [...](citation), so to would these require more intricate and complex renditions of the human anatomy. This would later evolve beyond the scope of mere appearance to human behaviour and movement as well as we delve into the more technical aspect in the below survey.
+\section{Proposal}
+I will be planning on using Humam Pose Estimation to gather data on different type
+of human activities. Using this data, I would then build a Machine Learning
+Model and/or Deep Neural Network with the human pose data which would allow me
+to classify body positions. One possible application is to have a model that
+would detect when a student has their hand raised. This would turn on a light on the instructor's desk. This could be done for both in person and
+online courses. Another possible application is to detect human positions when
+playing games such as charades and have those positions be described to a visually
+impaired person.
 
 \section{Survey}
-To achieve a realistic depiction of the human form, Human Pose Estimation requires, in broad terms, two main steps - preprocessing and body parts parsing. We will explore each step and its subsequent processes in detail, beginning with preprocessing.
+
+\subsection{Introduction}
+In recent years, the application of Human Pose Estimation has progressed
+exponentially in terms of speed and accuracy. From being able to detect simple
+2D poses of one person at the time to real-time multi-person 3D Human Pose
+detection in videos, this rapid evolution is mainly thanks to the advances of
+Deep Neural Networks, which help with the detection of body part sections and
+joints within the human body. Human Pose Estimation originally began as a means
+of basic object detection before its broader application into healthcare,
+entertainment, and videography in general. This document will seek to explain
+Human Pose Estimation's history, it's conception and progression according to
+the latest research, as well as its shortcomings in current applications.
+
+The origin of Pose Estimation was first hinted at by Martin A. Fischler and
+Robert A Elsachelager \cite{FischlerM.A1973TRaM} in 1973 in the form of matching
+Pictorial Structures, where, given a description of an object, one could find
+the object in a picture. One of the applications mentioned on
+\cite{FischlerM.A1973TRaM} was to perform some variance of facial detection.
+During this time, there was a strong need for object detection which prompted
+hastened research in Pictoral Structures. As technology advanced, more intricate
+and complex renditions of the human anatomy were required. This would later
+evolve beyond the scope of mere physical appearance to human behavior and movement as
+well, which will be further explained as we delve into the more technical aspect in the below
+survey.
+
+\subsection{Survey}
+To achieve a realistic depiction of the human form, Human Pose Estimation
+requires, in broad terms, two main steps - preprocessing and body parts parsing
+\cite{LiuZhao2015Asoh}. It also requires training deep learning models to
+predict the poses. We will further elaborate the method preprocessing in detail
+below.
+
+Before the popular models and approaches to solving this problem can be explained, we
+must discuss that pose estimation falls under two different methodologies,
+starting with the top-down approach. In the top-down approach, human detection
+is done using CNNs in two steps. First, much like the object detection
+algorithms, the framework will first detect bounding boxes around the humans.
+Later it involves estimating the pose inside of the boxes. Estimating poses
+requires finding important coordinates on a human body. These would include key
+points, such as knees, elbows, etc. For example, in the much widely used
+datasets, such as the COCO Dataset \cite{guler2018densepose}, 17 coordinates are
+used. In other research papers, and datasets, different numbers of keypoints
+could be used. These coordinates are paired with an extra field, which indicates
+whether the coordinate is visible or not. There are often occlusions to the body
+parts and it is the neural network’s job to infer the points regardless, and
+thus the training data must contain the points.
+
+In the bottom-up, CNNs are also used to solve the detection problem. However,
+the approach will first estimate all the key points in an image and then go on
+to classify which key points are for a person \cite{CaoZhe2021ORM2}. This helps
+in both “performance and efficiency”because top-down will estimate poses per
+person and is a two step process. There are many open source models that resolve
+this problem, and we will discuss the most recognized and state of the art model
+OpenPose \cite{CaoZhe2021ORM2}. The methods described here fall under the
+bottom-up, as do most of the state of the art approaches such as Regional
+Multi-Person Pose Estimation (AlphaPose) \cite{DBLP:journals/corr/FangXL16} .
+These models have been optimised to that they could be used in browser and/or
+mobile without the use of a GPU.
 
 \subsection{Prepocessing}
-Preprocessing can be generously defined as [...]. In this discipline in particular, it involves the initial division of the human body into several parts (known as segmentation)[...](citation), of taken with the exact measurements as expressed by a camera's calibration. The camera, in this instance, requires varying levels of perspective for it's beginning depiction, before it can be compiled through a process known as [...]. It does not appear that a specific brand of particular camera or video recorder is needed, nor does there seem to be a specific amount of differing perspectives needed before the dataset can be considered sufficient enough for processing [...](citation). A popular body capturing device found through research gathered appears to be the usage of Kinect [...](citation) - most likely due to its dominating presence of the market and cost [...](citation).
-After the adequate amount of data is gathered, it is later compiled into a [...] by [...]. The purpose of this compilation is so that [...] can determine [...]. This is typically an automated process performed by [...] which [...] by [...].
-After the fundamental skeleton has been rendered, another proponent of preprocessing involves body localization []. Body localization, as the name suggests, involves using a [...] to recognize and locate a humanoid figure in what can be considered a heavily convoluted image. Perhaps a robust example of this could be asking an [...] to distinguish a human body while it stands in front of a painted mosaic. The benefit of this technology has evolved to be used as [...], and under the context of HPE (Human Pose Estimation) it also helps to define the complete range and [...] of the body as it is expressed on said media.
-This flows into the usage of Human detection, which involves a similar concept in the recognition of a person's location and space in a given image. Human detection is done by [...] and later involves [...], similar to [...]. Note the primary difference between human detection and body localization as this: while [...] is [...] and can detect [...] based on [...], [...] captures [...] by evaluating [...]. While their method of capture may be a bit different, the two processes do share the result that comes about after they've performed their relevant calculations. However, the main goal of [...] is the [...] of [...]. Perhaps the greatest use is for [...], of which [...] could possibly for short on, thus making [...] the popular choice.
+Preprocessing can be generously defined as the work that must be done in order
+to best optiomized the data that will be used for the Machine Learning Model. In
+this discipline in particular, it involves the initial division of the human
+body into several parts \cite{papandreou2018personlab}, taken with the exact
+measurements as expressed by a camera's calibration. The camera, in this
+instance, requires varying levels of perspective for it's beginning depiction,
+before it can be compiled through a process known as Data calibration
+\cite{StollC2011Famt}. A popular body capturing device used to gather data is
+Microsoft's Kinect - most likely due to its dominating presence in the market
+and low cost \cite{Diego-MasJoseAntonio2014UKsi}.
 
-The final method of preprocessing involves Background Subtraction. Background Subtraction involves [...]. It appears to be different from  [...] proves unable to [...] due to [...]. The process requires [...] to later [...] into a [...] which provides an image with [...]. This process can be improved upon by [...]. Background Subtraction is particularly useful for [...]. However, a main weakpoint is that it [...], this is due to [...].
+Another proponent of preprocessing involves body localization
+\cite{LiuZhao2015Asoh}. Body localization, as the name suggests, involves using
+a human detection model to recognize and locate a humanoid figure. Perhaps a
+robust example of this could be asking an Machine learning model which could
+distinguish a human body while it stands in front of a painted mosaic. This
+method then lends itself into the usage of Human detection, which involves a
+similar concept in the recognition of a person's location and space in a given
+image. Much like other vision algorithms such as object classification,
+segmentation, and object detection, deep learning has improved upon traditional
+methods for pose estimation.
 
-Note that the above processes are components of preprocessing, but are not inherent steps required in any particular order (at least according to the resources gathered). It  is an educated estimation that while each method contains its strengths and weaknesses, a combination of the methods summarized above would lead to the greatest dataset needed to impose [...]. When attempting to replicate [...], it is important to note that each process required the same need for [...], this thus acts as a cornerstone for preprocessing as well as [...] as a whole, as it contributes to [...] in detail.
+Human detection is done using a CNN in two steps. First, much like the object
+detection algorithms, the framework will first detect bounding boxes around the
+humans. Later it involes estimating the pose inside of the boxes. Estimating
+poses require finding important coordinates on a human body. These would include
+key joints, such as knees, elbows, and wrists.
 
-% Notes:
-I would like to explore the field Human Project proposal on Human Pose Estimation
-Define what it is; in layment terms is the process of identifyind the pose of a person based on still images or video. These include 2d and 3d poses.
-IN the video/game media, people have use motion caspturing systems that rely on th subject to markes on their body to better track the individuals movements. This can be expensive since a whole setup sis required from special suuits to unobstructed backgrounds
-Other solutins include the use of infrared dots being project onto the indfivudal and then using a camara to capture these points, this was most publicaly used by microsfot Kinect.
+The final method of preprocessing involves Background Subtraction. Background
+Subtraction involves removal of data not needed. This can be achived by the
+usage of dense regions \cite{BMVC.24.34} where lighting and context change can
+be utilized to distinguish between what is in the foreground and what is in the
+background.
 
+Note that the above processes are components of preprocessing, but are not
+inherent steps required in any particular order (at least according to the
+resources gathered). It is an educated estimation that while each method
+contains its strengths and weaknesses, a combination of the methods summarized
+above would lead to the greatest dataset needed to create and image. When
+attempting to replicate the human form, it is important to note that each
+process requires the same need for feature extraction \cite{LiuZhao2015Asoh}.
 
-Body part/ join detection
-Different areas
-2d single person, multiperson in imgaes and Videos
+The second, and most admittedly most recognized portion of HPE is body parts
+parsing \cite{LiuZhao2015Asoh}. This is the process of identifying each section
+of a person body. There are four categories for this process which include 2D
+and 3D single and multi-person parsing. Each one of these categories have
+specific methods for feature extraction, appereance model and structure models.
+The compilation of these models and tooling all work to create a holistic image.
 
-Applications:
-  Robotics
-  Motion capturing for digital entertainment
-  Virtual./Augment Reality
-  Medical
-  Excersise monitoring
-  Body language analysis
-  Security/Instruction detection
-  Humcan computer interaction
-  Medical monitoring
+Out of the four categories of body parts parsing, two approaches by Chen/Yuille
+\cite{ChenXianjie2014APEb} and Thompson \cite{TompsonJonathan2014JToa} are
+perhaps the most popular, efficient and accurate. This can be surmised by the
+results of the subsequent benchmark performed by \cite{LiuZhao2015Asoh}. Results
+were strikingly similar and equally positive.
 
-process
-Body/human/object detection: Being able to detect where the substect is and then being
-Remove noise: Background substraction. Isolating the subject is key in order to properly analyze and determine the pose
+\subsection{Conclusion and Final Remarks}
 
+Human Pose Estimation, like with all disciplines in technology, is a constantly
+evolving process - and along with each of it's accomplishments, lies the
+existence of controversy and failure. With respect to AI (and it’s inferred
+infallibility when given the right dataset), we then must defer to controversies
+that are imposed mostly by human error, bias, and methodology. That is to say,
+that most of the controversy surrounding Human Pose Estimation is caused by the
+application of it’s use, rather than by the technology itself. One striking
+topic that has arose since the emergence of HPE is fitness and the tools we use
+to improve it. The question then arises as to how we should cater to a more diverse
+group of users. As Maksym Tatriants \cite{tatariants_2020} cite’s, “fitness is
+on trend,”and HPE has entered the playground as a helpful tool in analyzing a
+user’s posture during regular exercise. While the idea of this application is
+beneficial, it has been found to have several shortcomings in real world
+application.
 
-%Outline
-%Introduction
-%Introduce field it's initial conception, current trends and progression, and hint at controversy
-%Survey
-%Select 5 topics, explain conception advancement and counter advancement
-%Topic 1 - Preprocessing
-    2 - 3 sentences: How does it work?
+Take Maksym Tatariants, author of "Challenges of Human Pose Estimation in
+AI-Powered Fitness Apps" \cite{tatariants_2020}, and his experience practicing a
+simple squat using a fitness AI model as an example. In his experience,
+Tatariants remarks that before the exercise session can even begin, there are
+already shortcomings in its attempt to guide the user towards the correct
+posture. “Men and women's bodies are physiologically different,” he explains.
+“If the model was trained only on men's images, it will return accurate results
+for only male users but not for females.” This also brings into question the
+height and weight of dataset the AI was given versus the same measurements of
+the user performing the exercise. In this day and age, what is considered
+average height and weight? How broad of a range in this matter can be determined
+to be safe before the exercise can be performed correctly? These are popular
+media questions that, while they do may neccessarily contribute to the
+advancement of Human Pose Estimation, may very well effect it’s application and
+use in the future.
 
-%Topic 2- Body Parts Procesing
-  2 - 3 sentences: How does it work?
-
-%Topic 3 - Benchmarks and Comparisons
-  2 - 3 sentences: How were these achieved
-  Results
-  Weakness of study
-
-%Topic 4 - Applications of Future Use
-- Body parising strongpoints
-- Weakness of Ai Evolution and predopistion to dataset used
-- Controversy and hinderance of study
-
-%Conclusion
-
-Scoring:
-Problems:
- background
- context
- obstruction
-
-limitations
-
-Future
-
-
-\section{Approach}
-
-
-Write about the proposed work touching the research gap you are addressing, novelty etc. When you are using some references, make sure you list them in the reference below and cite them in this section \cite{Linhart2014} \cite{Linhart2008}.
-
-And in the last paragraph write about the proposed deliverable aimed from this thesis  \cite{fractalwiki}.
-
-Proposed Guides: Dr./Mr./Ms Name of faculty, Professor/Associate/Assistant Professor, Department, Campus.  \nocite{higham1998handbook}
-
-\begin{itemize}
-  \item Well organized
-  \item Well written
-  \item Ideas are clearly stated and the task of the project is well-defined
-  \item Concepts are formally stated
-  \item Statements are correct
-  \item Broad and deep coverage of the literature
-  \item Critical analysis of the literature
-  \item Pros and cons, gaps, limitations, drawbacks of existing work are identified
-  \item Connections and relationships among the various methods are identified and discussed
-  \item The writing shows that the student has a good understanding of existing work
-  \item Use of tables and graphics to highlight the features of the methods being discussed helps the reader to grasp the overall picture and is highly recommended
-  \item Latex is required for writing the proposal
-\end{itemize}
+In spite of this, Human Pose Estimation and it’s achievements in all fields, not
+just fitness, will continue to push it forward. As the public becomes gradually
+more comfortable with the assistance of AI-rendered HPE in their everyday lives,
+the more unique and diverse datasets will become to provide a human assisted
+application that will benefit everyone.
 
 
 \bibliographystyle{plain}
 \bibliography{M335}
 
 \end{document}
-
-
-
-204 "AI-Based 3D Pose Estimation: Almost Real Time!", https://www.youtube.com/watch?v=F84jaIR5Uxc&list=PLujxSBD-JXglGL3ERdDOhthD3jTlfudC2&index=204
-237 "AI Learns Human Pose Estimation From Videos | Two Minute Papers #237", https://www.youtube.com/watch?v=dxOHmvTaCN4&list=PLujxSBD-JXglGL3ERdDOhthD3jTlfudC2&index=284
-247 "Human Pose Estimation With Deep Learning | Two Minute Papers #106", https://www.youtube.com/watch?v=NnzzSkKKoa8&list=PLujxSBD-JXglGL3ERdDOhthD3jTlfudC2&index=247
-252 "Can an AI Learn The Concept of Pose And Appearance? 👱‍♀️", https://www.youtube.com/watch?v=Z6iTo7KY7lw&list=PLujxSBD-JXglGL3ERdDOhthD3jTlfudC2&index=252
