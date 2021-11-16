@@ -22,92 +22,104 @@
 // }
 
 function thread_sleep(time_ms) {
-    return new Promise((resolve, reject) => {
-        if (isNaN(time_ms)) {
-            reject(new Error('Not a valid time.'));
-        } else {
-            setTimeout(resolve, time_ms);
-        }
-    });
+  return new Promise((resolve, reject) => {
+    if (isNaN(time_ms)) {
+      reject(new Error('Not a valid time.'));
+    } else {
+      setTimeout(resolve, time_ms);
+    }
+  });
+}
+
+function getPoseNet(videoSource) {
+  return new Promise((resolve, reject) => {
+    const poseNet = ml5.poseNet(videoSource, () => resolve(poseNet));
+  });
 }
 
 class NeuralNetworkDataCollection {
-    constructor(videoSource) {
-        this.pose = null;
-        this.skeleton = null;
+  constructor(videoSource) {
+    this.pose = null;
+    this.skeleton = null;
+    this.isCollecting = false;
+    this.finishedTraining = false;
+    this.targetLabel = ''
+    this.poseNet = ml5.poseNet(video, () => console.log("PoseNet Loaded."));
+    this.poseNet.on('pose', this.onPoseDetectedDataCollection);
+
+    let options = {
+      inputs: 34,
+      outputs: 4,
+      task: "classification",
+      debug: true,
+    }
+    this.nnCollector = ml5.neuralNetwork(options);
+  }
+
+  onPoseDetectedDataCollection(poses) {
+    console.log(poses);
+    if (poses.length > 0) {
+      this.pose = poses[0].pose;
+      this.skeleton = poses[0].skeleton;
+      if (this.isCollecting) {
+        let inputs = [];
+        for (let i = 0; i < this.pose.keypoints.length; i++) {
+          let x = this.pose.keypoints[i].position.x;
+          let y = this.pose.keypoints[i].position.y;
+          inputs.push(x);
+          inputs.push(y);
+        }
+        let target = [this.targetLabel];
+        this.nnCollector.addData(inputs, target);
+      }
+    }
+  }
+
+  onPoseDetectedClassify(poses) {
+    console.log(poses);
+    if (poses.length > 0) {
+      this.pose = poses[0].pose;
+      this.skeleton = poses[0].skeleton;
+
+    }
+  }
+
+  train() {
+    console.log('Normalizing Data');
+    this.nnCollector.normalizeData();
+    console.log('Begin training...')
+    this.nnCollector.train({
+      epochs: 50
+    }, () => {
+      console.log('Finished Training');
+      this.finishedTraining = true;
+      this.nnCollector.save();
+    });
+  }
+
+  async keyPressHandler(key) {
+    if (!this.finishedTraining) {
+      if (key == 's') {
+        this.nnCollector.saveData();
+      } else if (key == 'f') {
+        console.log('Collection has been terminated!');
         this.isCollecting = false;
-        this.finishedTraining = false;
-        this.poseNet = ml5.poseNet(video, () => console.log("PoseNet Loaded."));
-        this.poseNet.on('pose', this.onPoseDetectedDataCollection);
+        this.nnCollector.saveData();
+        this.train();
+      } else {
+        targetLabel = key;
+        console.log(targetLabel);
 
-        let options = {
-            inputs: 34,
-            outputs: 4,
-            task: "classification",
-            debug: true,
-        }
-        this.nnCollector = ml5.neuralNetwork(options);
+        await thread_sleep(10000);
+        console.log('Collecting for ' + targetLabel);
+        this.isCollecting = true;
+
+        await thread_sleep(10000);
+        console.log('Not Collection');
+        this.isCollecting = false;
+      }
     }
-
-    onPoseDetectedDataCollection(poses) {
-        console.log(poses);
-        if (poses.length > 0) {
-            this.pose = poses[0].pose;
-            this.skeleton = poses[0].skeleton;
-            if (this.isCollecting) {
-                let inputs = [];
-                for (let i = 0; i < this.pose.keypoints.length; i++) {
-                    let x = this.pose.keypoints[i].position.x;
-                    let y = this.pose.keypoints[i].position.y;
-                    inputs.push(x);
-                    inputs.push(y);
-                }
-                let target = [targetLabel];
-                this.nnCollector.addData(inputs, target);
-            }
-        }
-    }
-
-    onPoseDetectedClassify(poses) {
-        console.log(poses);
-        if (poses.length > 0) {
-            this.pose = poses[0].pose;
-            this.skeleton = poses[0].skeleton;
-
-        }
-    }
-
-    train() {
-        this.nnCollector.train({ epochs: 50 }, () => this.finishedTraining = true);
-
-    }
-
-    stopCollecting(){
-        this.isCollecting = False;
-    }
-
-    async keyPressHandler(key) {
-        if (!this.finishedTraining) {
-            if (key == 's') {
-                this.nnCollector.saveData();
-            } else if (key == 't') {
-                this.train();
-                this.isCollecting = false;
-            }
-            else {
-                targetLabel = key;
-                console.log(targetLabel);
-
-                await thread_sleep(10000);
-                console.log('Collecting for ' + targetLabel);
-                this.isCollecting = true;
-
-                await thread_sleep(10000);
-                console.log('Not Collection');
-                this.isCollecting = false;
-            }
-        }
-    }
+  }
 }
 
 let video;
@@ -124,75 +136,78 @@ let targeLabel;
 let dataCollector
 
 function keyPressed() {
-    dataCollector.keyPressHandler(key);
+  dataCollector.keyPressHandler(key);
 }
 
 function setup() {
-    createCanvas(640, 480);
+  createCanvas(640, 480);
 
-    video = createCapture(VIDEO);
-    video.hide();
+  video = createCapture(VIDEO);
+  video.hide();
 
-    dataCollector = new DataCollection(video)
+  dataCollector = new DataCollection(video)
 
-    brain = ml5.neuralNetwork(options);
+  brain = ml5.neuralNetwork(options);
 }
 
 function collectDataWithPoseNet(videoSource) {
-    let video;
-    let poseNet;
-    let pose;
-    let skeleton;
+  let video;
+  let poseNet;
+  let pose;
+  let skeleton;
 
-    let brain;
+  let brain;
 
-    let state = 'waiting';
-    let targeLabel;
+  let state = 'waiting';
+  let targeLabel;
 
-    const poseNet = ml5.poseNet(video, () => console.log("PoseNet Loaded."));
+  const poseNet = ml5.poseNet(video, () => console.log("PoseNet Loaded."));
 
-    const onPoseDetected = (poses) => {
-        console.log(poses);
-        if (poses.length > 0) {
-            pose = poses[0].pose;
-            skeleton = poses[0].skeleton;
-            if (state == 'collecting') {
-                let inputs = [];
-                for (let i = 0; i < pose.keypoints.length; i++) {
-                    let x = pose.keypoints[i].position.x;
-                    let y = pose.keypoints[i].position.y;
-                    inputs.push(x);
-                    inputs.push(y);
-                }
-                let target = [targetLabel];
-                brain.addData(inputs, target);
-            }
+  const onPoseDetected = (poses) => {
+    console.log(poses);
+    if (poses.length > 0) {
+      pose = poses[0].pose;
+      skeleton = poses[0].skeleton;
+      if (state == 'collecting') {
+        let inputs = [];
+        for (let i = 0; i < pose.keypoints.length; i++) {
+          let x = pose.keypoints[i].position.x;
+          let y = pose.keypoints[i].position.y;
+          inputs.push(x);
+          inputs.push(y);
         }
+        let target = [targetLabel];
+        brain.addData(inputs, target);
+      }
     }
-    poseNet.on('pose', onPoseDetected);
+  }
+  poseNet.on('pose', onPoseDetected);
 }
 
 
 function draw() {
-    translate(video.width, 0);
-    scale(-1, 1);
-    image(video, 0, 0, video.width, video.height);
+  translate(video.width, 0);
+  scale(-1, 1);
+  image(video, 0, 0, video.width, video.height);
 
-    if (pose) {
-        for (let i = 0; i < skeleton.length; i++) {
-            let a = skeleton[i][0];
-            let b = skeleton[i][1];
-            strokeWeight(2);
-            stroke(0);
+  if (pose) {
+    for (let i = 0; i < skeleton.length; i++) {
+      let a = skeleton[i][0];
+      let b = skeleton[i][1];
+      strokeWeight(2);
+      stroke(0);
 
-            line(a.position.x, a.position.y, b.position.x, b.position.y);
-        }
-        for (let i = 0; i < pose.keypoints.length; i++) {
-            let x = pose.keypoints[i].position.x;
-            let y = pose.keypoints[i].position.y;
-            fill(0);
-            stroke(255);
-            ellipse(x, y, 16, 16);
-        }
+      line(a.position.x, a.position.y, b.position.x, b.position.y);
     }
+    for (let i = 0; i < pose.keypoints.length; i++) {
+      let x = pose.keypoints[i].position.x;
+      let y = pose.keypoints[i].position.y;
+      fill(0);
+      stroke(255);
+      ellipse(x, y, 16, 16);
+    }
+  }
 }
+
+
+

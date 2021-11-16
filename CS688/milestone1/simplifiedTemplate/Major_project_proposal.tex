@@ -2,223 +2,178 @@
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
 
-\title{Human Pose Estimation: PoseNet}
+\title{Human Pose Estimation}
 \author{Flavio Amurrio-Moya, G00593001}
-\date{famurrio@gmu.edu}
+\date{Octobe 2021}
 
 \begin{document}
 
 \maketitle
 
-\newpage
+\section{Proposal}
+I will be planning on using Humam Pose Estimation to gather data on different type
+of human activities. Using this data, I would then build a Machine Learning
+Model and/or Deep Neural Network with the human pose data which would allow me
+to classify body positions. One possible application is to have a model that
+would detect when a student has their hand raised. This would turn on a light on the instructor's desk. This could be done for both in person and
+online courses. Another possible application is to detect human positions when
+playing games such as charades and have those positions be described to a visually
+impaired person.
 
-% Deliverables:
-%     (1) code with a readme file that explains how to use the code;
-%     (2) a report explaining the specific task, experiments, and results.
+\section{Survey}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Source Paper}
-Section: "Source paper": full reference of the paper (authors, title, venue and year of publication)
+\subsection{Introduction}
+In recent years, the application of Human Pose Estimation has progressed
+exponentially in terms of speed and accuracy. From being able to detect simple
+2D poses of one person at the time to real-time multi-person 3D Human Pose
+detection in videos, this rapid evolution is mainly thanks to the advances of
+Deep Neural Networks, which help with the detection of body part sections and
+joints within the human body. Human Pose Estimation originally began as a means
+of basic object detection before its broader application into healthcare,
+entertainment, and videography in general. This document will seek to explain
+Human Pose Estimation's history, it's conception and progression according to
+the latest research, as well as its shortcomings in current applications.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Source Code}
-Section: "Source code": language used; list of libraries used and for which task; description of the code you wrote and for each tasks
+The origin of Pose Estimation was first hinted at by Martin A. Fischler and
+Robert A Elsachelager \cite{FischlerM.A1973TRaM} in 1973 in the form of matching
+Pictorial Structures, where, given a description of an object, one could find
+the object in a picture. One of the applications mentioned on
+\cite{FischlerM.A1973TRaM} was to perform some variance of facial detection.
+During this time, there was a strong need for object detection which prompted
+hastened research in Pictoral Structures. As technology advanced, more intricate
+and complex renditions of the human anatomy were required. This would later
+evolve beyond the scope of mere physical appearance to human behavior and movement as
+well, which will be further explained as we delve into the more technical aspect in the below
+survey.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Methodology}
-Section: "Methodology": Brief and clear description of the algorithm you have implemented
+\subsection{Survey}
+To achieve a realistic depiction of the human form, Human Pose Estimation
+requires, in broad terms, two main steps - preprocessing and body parts parsing
+\cite{LiuZhao2015Asoh}. It also requires training deep learning models to
+predict the poses. We will further elaborate the method preprocessing in detail
+below.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Experiments}
-% Section: "Experiments":
+Before the popular models and approaches to solving this problem can be explained, we
+must discuss that pose estimation falls under two different methodologies,
+starting with the top-down approach. In the top-down approach, human detection
+is done using CNNs in two steps. First, much like the object detection
+algorithms, the framework will first detect bounding boxes around the humans.
+Later it involves estimating the pose inside of the boxes. Estimating poses
+requires finding important coordinates on a human body. These would include key
+points, such as knees, elbows, etc. For example, in the much widely used
+datasets, such as the COCO Dataset \cite{guler2018densepose}, 17 coordinates are
+used. In other research papers, and datasets, different numbers of keypoints
+could be used. These coordinates are paired with an extra field, which indicates
+whether the coordinate is visible or not. There are often occlusions to the body
+parts and it is the neural network’s job to infer the points regardless, and
+thus the training data must contain the points.
 
-\subsection{Experiments Description}
-- Description of the experiments you have conduced
+In the bottom-up, CNNs are also used to solve the detection problem. However,
+the approach will first estimate all the key points in an image and then go on
+to classify which key points are for a person \cite{CaoZhe2021ORM2}. This helps
+in both “performance and efficiency”because top-down will estimate poses per
+person and is a two step process. There are many open source models that resolve
+this problem, and we will discuss the most recognized and state of the art model
+OpenPose \cite{CaoZhe2021ORM2}. The methods described here fall under the
+bottom-up, as do most of the state of the art approaches such as Regional
+Multi-Person Pose Estimation (AlphaPose) \cite{DBLP:journals/corr/FangXL16} .
+These models have been optimised to that they could be used in browser and/or
+mobile without the use of a GPU.
 
-\subsection{Source Paper Results}
-- Clearly identify the results in the source paper that you have replicated or tried to replicate in case you had to make adjustments
+\subsection{Prepocessing}
+Preprocessing can be generously defined as the work that must be done in order
+to best optiomized the data that will be used for the Machine Learning Model. In
+this discipline in particular, it involves the initial division of the human
+body into several parts \cite{papandreou2018personlab}, taken with the exact
+measurements as expressed by a camera's calibration. The camera, in this
+instance, requires varying levels of perspective for it's beginning depiction,
+before it can be compiled through a process known as Data calibration
+\cite{StollC2011Famt}. A popular body capturing device used to gather data is
+Microsoft's Kinect - most likely due to its dominating presence in the market
+and low cost \cite{Diego-MasJoseAntonio2014UKsi}.
 
-\subsection{Dataset Used}
-            - Description of the data used and link to the data: number of samples, number of features, number of classes, etc.                   - Provide a link to the data.
+Another proponent of preprocessing involves body localization
+\cite{LiuZhao2015Asoh}. Body localization, as the name suggests, involves using
+a human detection model to recognize and locate a humanoid figure. Perhaps a
+robust example of this could be asking an Machine learning model which could
+distinguish a human body while it stands in front of a painted mosaic. This
+method then lends itself into the usage of Human detection, which involves a
+similar concept in the recognition of a person's location and space in a given
+image. Much like other vision algorithms such as object classification,
+segmentation, and object detection, deep learning has improved upon traditional
+methods for pose estimation.
 
-\subsection{Evaluation Measure}
-             - Evaluation measures used
+Human detection is done using a CNN in two steps. First, much like the object
+detection algorithms, the framework will first detect bounding boxes around the
+humans. Later it involes estimating the pose inside of the boxes. Estimating
+poses require finding important coordinates on a human body. These would include
+key joints, such as knees, elbows, and wrists.
 
-\subsection{Training and Testing}
-             - Discuss how training and testing were conducted; cross-validation techniques; numbers of runs, etc.
+The final method of preprocessing involves Background Subtraction. Background
+Subtraction involves removal of data not needed. This can be achived by the
+usage of dense regions \cite{BMVC.24.34} where lighting and context change can
+be utilized to distinguish between what is in the foreground and what is in the
+background.
 
-\subsection{Experiment Results}
-             - Tables and/or Plots of the results
+Note that the above processes are components of preprocessing, but are not
+inherent steps required in any particular order (at least according to the
+resources gathered). It is an educated estimation that while each method
+contains its strengths and weaknesses, a combination of the methods summarized
+above would lead to the greatest dataset needed to create and image. When
+attempting to replicate the human form, it is important to note that each
+process requires the same need for feature extraction \cite{LiuZhao2015Asoh}.
 
-\subsection{Analysis}
-             - Presentation, Discussion, and Analysis of the results
+The second, and most admittedly most recognized portion of HPE is body parts
+parsing \cite{LiuZhao2015Asoh}. This is the process of identifying each section
+of a person body. There are four categories for this process which include 2D
+and 3D single and multi-person parsing. Each one of these categories have
+specific methods for feature extraction, appereance model and structure models.
+The compilation of these models and tooling all work to create a holistic image.
 
+Out of the four categories of body parts parsing, two approaches by Chen/Yuille
+\cite{ChenXianjie2014APEb} and Thompson \cite{TompsonJonathan2014JToa} are
+perhaps the most popular, efficient and accurate. This can be surmised by the
+results of the subsequent benchmark performed by \cite{LiuZhao2015Asoh}. Results
+were strikingly similar and equally positive.
 
+\subsection{Conclusion and Final Remarks}
 
-% \section{Proposal}
-% I will be planning on using Humam Pose Estimation to gather data on different type
-% of human activities. Using this data, I would then build a Machine Learning
-% Model and/or Deep Neural Network with the human pose data which would allow me
-% to classify body positions. One possible application is to have a model that
-% would detect when a student has their hand raised. This would turn on a light on the instructor's desk. This could be done for both in person and
-% online courses. Another possible application is to detect human positions when
-% playing games such as charades and have those positions be described to a visually
-% impaired person.
+Human Pose Estimation, like with all disciplines in technology, is a constantly
+evolving process - and along with each of it's accomplishments, lies the
+existence of controversy and failure. With respect to AI (and it’s inferred
+infallibility when given the right dataset), we then must defer to controversies
+that are imposed mostly by human error, bias, and methodology. That is to say,
+that most of the controversy surrounding Human Pose Estimation is caused by the
+application of it’s use, rather than by the technology itself. One striking
+topic that has arose since the emergence of HPE is fitness and the tools we use
+to improve it. The question then arises as to how we should cater to a more diverse
+group of users. As Maksym Tatriants \cite{tatariants_2020} cite’s, “fitness is
+on trend,”and HPE has entered the playground as a helpful tool in analyzing a
+user’s posture during regular exercise. While the idea of this application is
+beneficial, it has been found to have several shortcomings in real world
+application.
 
-% \section{Survey}
+Take Maksym Tatariants, author of "Challenges of Human Pose Estimation in
+AI-Powered Fitness Apps" \cite{tatariants_2020}, and his experience practicing a
+simple squat using a fitness AI model as an example. In his experience,
+Tatariants remarks that before the exercise session can even begin, there are
+already shortcomings in its attempt to guide the user towards the correct
+posture. “Men and women's bodies are physiologically different,” he explains.
+“If the model was trained only on men's images, it will return accurate results
+for only male users but not for females.” This also brings into question the
+height and weight of dataset the AI was given versus the same measurements of
+the user performing the exercise. In this day and age, what is considered
+average height and weight? How broad of a range in this matter can be determined
+to be safe before the exercise can be performed correctly? These are popular
+media questions that, while they do may neccessarily contribute to the
+advancement of Human Pose Estimation, may very well effect it’s application and
+use in the future.
 
-% \subsection{Introduction}
-% In recent years, the application of Human Pose Estimation has progressed
-% exponentially in terms of speed and accuracy. From being able to detect simple
-% 2D poses of one person at the time to real-time multi-person 3D Human Pose
-% detection in videos, this rapid evolution is mainly thanks to the advances of
-% Deep Neural Networks, which help with the detection of body part sections and
-% joints within the human body. Human Pose Estimation originally began as a means
-% of basic object detection before its broader application into healthcare,
-% entertainment, and videography in general. This document will seek to explain
-% Human Pose Estimation's history, it's conception and progression according to
-% the latest research, as well as its shortcomings in current applications.
-
-% The origin of Pose Estimation was first hinted at by Martin A. Fischler and
-% Robert A Elsachelager \cite{FischlerM.A1973TRaM} in 1973 in the form of matching
-% Pictorial Structures, where, given a description of an object, one could find
-% the object in a picture. One of the applications mentioned on
-% \cite{FischlerM.A1973TRaM} was to perform some variance of facial detection.
-% During this time, there was a strong need for object detection which prompted
-% hastened research in Pictoral Structures. As technology advanced, more intricate
-% and complex renditions of the human anatomy were required. This would later
-% evolve beyond the scope of mere physical appearance to human behavior and movement as
-% well, which will be further explained as we delve into the more technical aspect in the below
-% survey.
-
-% \subsection{Survey}
-% To achieve a realistic depiction of the human form, Human Pose Estimation
-% requires, in broad terms, two main steps - preprocessing and body parts parsing
-% \cite{LiuZhao2015Asoh}. It also requires training deep learning models to
-% predict the poses. We will further elaborate the method preprocessing in detail
-% below.
-
-% Before the popular models and approaches to solving this problem can be explained, we
-% must discuss that pose estimation falls under two different methodologies,
-% starting with the top-down approach. In the top-down approach, human detection
-% is done using CNNs in two steps. First, much like the object detection
-% algorithms, the framework will first detect bounding boxes around the humans.
-% Later it involves estimating the pose inside of the boxes. Estimating poses
-% requires finding important coordinates on a human body. These would include key
-% points, such as knees, elbows, etc. For example, in the much widely used
-% datasets, such as the COCO Dataset \cite{guler2018densepose}, 17 coordinates are
-% used. In other research papers, and datasets, different numbers of keypoints
-% could be used. These coordinates are paired with an extra field, which indicates
-% whether the coordinate is visible or not. There are often occlusions to the body
-% parts and it is the neural network’s job to infer the points regardless, and
-% thus the training data must contain the points.
-
-% In the bottom-up, CNNs are also used to solve the detection problem. However,
-% the approach will first estimate all the key points in an image and then go on
-% to classify which key points are for a person \cite{CaoZhe2021ORM2}. This helps
-% in both “performance and efficiency”because top-down will estimate poses per
-% person and is a two step process. There are many open source models that resolve
-% this problem, and we will discuss the most recognized and state of the art model
-% OpenPose \cite{CaoZhe2021ORM2}. The methods described here fall under the
-% bottom-up, as do most of the state of the art approaches such as Regional
-% Multi-Person Pose Estimation (AlphaPose) \cite{DBLP:journals/corr/FangXL16} .
-% These models have been optimised to that they could be used in browser and/or
-% mobile without the use of a GPU.
-
-% \subsection{Prepocessing}
-% Preprocessing can be generously defined as the work that must be done in order
-% to best optiomized the data that will be used for the Machine Learning Model. In
-% this discipline in particular, it involves the initial division of the human
-% body into several parts \cite{papandreou2018personlab}, taken with the exact
-% measurements as expressed by a camera's calibration. The camera, in this
-% instance, requires varying levels of perspective for it's beginning depiction,
-% before it can be compiled through a process known as Data calibration
-% \cite{StollC2011Famt}. A popular body capturing device used to gather data is
-% Microsoft's Kinect - most likely due to its dominating presence in the market
-% and low cost \cite{Diego-MasJoseAntonio2014UKsi}.
-
-% Another proponent of preprocessing involves body localization
-% \cite{LiuZhao2015Asoh}. Body localization, as the name suggests, involves using
-% a human detection model to recognize and locate a humanoid figure. Perhaps a
-% robust example of this could be asking an Machine learning model which could
-% distinguish a human body while it stands in front of a painted mosaic. This
-% method then lends itself into the usage of Human detection, which involves a
-% similar concept in the recognition of a person's location and space in a given
-% image. Much like other vision algorithms such as object classification,
-% segmentation, and object detection, deep learning has improved upon traditional
-% methods for pose estimation.
-
-% Human detection is done using a CNN in two steps. First, much like the object
-% detection algorithms, the framework will first detect bounding boxes around the
-% humans. Later it involes estimating the pose inside of the boxes. Estimating
-% poses require finding important coordinates on a human body. These would include
-% key joints, such as knees, elbows, and wrists.
-
-% The final method of preprocessing involves Background Subtraction. Background
-% Subtraction involves removal of data not needed. This can be achived by the
-% usage of dense regions \cite{BMVC.24.34} where lighting and context change can
-% be utilized to distinguish between what is in the foreground and what is in the
-% background.
-
-% Note that the above processes are components of preprocessing, but are not
-% inherent steps required in any particular order (at least according to the
-% resources gathered). It is an educated estimation that while each method
-% contains its strengths and weaknesses, a combination of the methods summarized
-% above would lead to the greatest dataset needed to create and image. When
-% attempting to replicate the human form, it is important to note that each
-% process requires the same need for feature extraction \cite{LiuZhao2015Asoh}.
-
-% The second, and most admittedly most recognized portion of HPE is body parts
-% parsing \cite{LiuZhao2015Asoh}. This is the process of identifying each section
-% of a person body. There are four categories for this process which include 2D
-% and 3D single and multi-person parsing. Each one of these categories have
-% specific methods for feature extraction, appereance model and structure models.
-% The compilation of these models and tooling all work to create a holistic image.
-
-% Out of the four categories of body parts parsing, two approaches by Chen/Yuille
-% \cite{ChenXianjie2014APEb} and Thompson \cite{TompsonJonathan2014JToa} are
-% perhaps the most popular, efficient and accurate. This can be surmised by the
-% results of the subsequent benchmark performed by \cite{LiuZhao2015Asoh}. Results
-% were strikingly similar and equally positive.
-
-% \subsection{Conclusion and Final Remarks}
-
-% Human Pose Estimation, like with all disciplines in technology, is a constantly
-% evolving process - and along with each of it's accomplishments, lies the
-% existence of controversy and failure. With respect to AI (and it’s inferred
-% infallibility when given the right dataset), we then must defer to controversies
-% that are imposed mostly by human error, bias, and methodology. That is to say,
-% that most of the controversy surrounding Human Pose Estimation is caused by the
-% application of it’s use, rather than by the technology itself. One striking
-% topic that has arose since the emergence of HPE is fitness and the tools we use
-% to improve it. The question then arises as to how we should cater to a more diverse
-% group of users. As Maksym Tatriants \cite{tatariants_2020} cite’s, “fitness is
-% on trend,”and HPE has entered the playground as a helpful tool in analyzing a
-% user’s posture during regular exercise. While the idea of this application is
-% beneficial, it has been found to have several shortcomings in real world
-% application.
-
-% Take Maksym Tatariants, author of "Challenges of Human Pose Estimation in
-% AI-Powered Fitness Apps" \cite{tatariants_2020}, and his experience practicing a
-% simple squat using a fitness AI model as an example. In his experience,
-% Tatariants remarks that before the exercise session can even begin, there are
-% already shortcomings in its attempt to guide the user towards the correct
-% posture. “Men and women's bodies are physiologically different,” he explains.
-% “If the model was trained only on men's images, it will return accurate results
-% for only male users but not for females.” This also brings into question the
-% height and weight of dataset the AI was given versus the same measurements of
-% the user performing the exercise. In this day and age, what is considered
-% average height and weight? How broad of a range in this matter can be determined
-% to be safe before the exercise can be performed correctly? These are popular
-% media questions that, while they do may neccessarily contribute to the
-% advancement of Human Pose Estimation, may very well effect it’s application and
-% use in the future.
-
-% In spite of this, Human Pose Estimation and it’s achievements in all fields, not
-% just fitness, will continue to push it forward. As the public becomes gradually
-% more comfortable with the assistance of AI-rendered HPE in their everyday lives,
-% the more unique and diverse datasets will become to provide a human assisted
-% application that will benefit everyone.
+In spite of this, Human Pose Estimation and it’s achievements in all fields, not
+just fitness, will continue to push it forward. As the public becomes gradually
+more comfortable with the assistance of AI-rendered HPE in their everyday lives,
+the more unique and diverse datasets will become to provide a human assisted
+application that will benefit everyone.
 
 
 \bibliographystyle{plain}
